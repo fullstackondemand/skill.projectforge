@@ -1,29 +1,113 @@
 ---
 name: projectforge
-description: Use when a user wants to turn an application idea into a structured IT project plan, define team roles, understand the software development lifecycle, or create an actionable workflow from requirements through maintenance.
+description: Use when Codex must plan, design, implement, refactor, or verify an application feature or repository change from an idea, requirement, issue, or existing codebase.
 ---
 
 # ProjectForge
 
 ## Overview
 
-Convert an application idea into a practical development workflow. Clarify the problem, define users and features, assign responsibilities, select an appropriate architecture, and produce a phased delivery plan.
+Guide Codex from an application idea, issue, or repository task to a verified code change. Inspect the existing codebase, clarify expected behaviour, choose the smallest suitable design, implement with tests, and report evidence.
 
-**Core principle:** Do not begin implementation until the problem, users, scope, and acceptance criteria are clear enough to test.
+**Core principle:** Codex must understand the repository and verify behaviour before claiming a change is complete.
 
 ## When to Use
 
-Use this skill when the user asks to:
+Use this skill when Codex is asked to:
 
-- Create a web, mobile, desktop, SaaS, or internal business application
-- Understand which IT roles are required
-- Convert an idea into a development roadmap
-- Define the work cycle for an application team
-- Prepare requirements before coding
-- Organize frontend, backend, QA, DevOps, design, and product work
-- Create an MVP feature list or project phases
+- Create or extend a web, mobile, desktop, SaaS, API, CLI, or internal application
+- Convert an idea, issue, PRD, or bug report into an implementation plan
+- Analyze an existing repository before changing it
+- Design a feature, module, API, database change, or system boundary
+- Implement a multi-file feature or refactor
+- Establish architecture, clean-code, folder, and filename conventions
+- Add tests, review code quality, or verify a completed change
+- Prepare a repository for deployment or maintenance
 
-Do not use it only for a small isolated code fix with already-defined requirements.
+For a tiny, fully specified edit, use the repository's normal workflow directly. Still inspect the relevant files and run focused verification.
+
+## Codex Repository Workflow
+
+Follow this sequence whenever a repository is available.
+
+### 1. Inspect Before Editing
+
+- Read repository instructions such as `AGENTS.md`, `README.md`, contribution guides, and package scripts.
+- Inspect the relevant directory tree, source files, tests, configuration, and dependency manifests.
+- Search for similar features and existing conventions before introducing a new pattern.
+- Check the current Git status and avoid overwriting unrelated user changes.
+- Identify the smallest set of files that should change.
+
+**Rule:** Do not invent the stack, folder structure, commands, or coding style when the repository already defines them.
+
+### 2. Resolve the Task
+
+Write down or infer:
+
+- Current behaviour
+- Desired behaviour
+- Acceptance criteria
+- Constraints and compatibility requirements
+- Edge cases and failure states
+- Files, modules, and interfaces likely to be affected
+
+For ambiguous details, make conservative, clearly stated assumptions rather than expanding scope unnecessarily.
+
+### 3. Plan the Change
+
+For multi-step work, create a concise implementation plan that includes:
+
+1. Behaviour or tests to add
+2. Production files to change
+3. Data, API, or migration impact
+4. Security and backward-compatibility risks
+5. Verification commands
+
+Keep the plan proportional to the task. Do not produce a large planning document for a one-line change.
+
+### 4. Implement Test-First
+
+- Add or update a focused test that demonstrates the required behaviour.
+- Run it and confirm it fails for the expected reason.
+- Write the minimum implementation required to pass.
+- Refactor only after the behaviour passes.
+- Preserve public interfaces unless the requirement explicitly changes them.
+- Follow existing repository naming, error handling, dependency, and architectural conventions.
+
+When tests are impractical, explain why and use the strongest available verification such as type checking, build checks, static analysis, or a reproducible manual check.
+
+### 5. Review the Diff
+
+Before completion:
+
+- Inspect the final Git diff.
+- Remove accidental edits, debug output, temporary files, dead code, and unrelated formatting changes.
+- Check imports, filenames, public exports, migrations, configuration, and documentation.
+- Review security-sensitive boundaries: input validation, authorization, secrets, file access, commands, and external requests.
+
+### 6. Verify With Evidence
+
+Run the narrowest relevant checks first, then broader checks when justified:
+
+1. Focused unit or feature tests
+2. Type checking or compilation
+3. Linting and formatting checks
+4. Integration or end-to-end tests
+5. Production build
+
+Never claim that tests pass, a bug is fixed, or the application builds without seeing successful command output.
+
+### 7. Report Completion
+
+State:
+
+- What changed
+- Important design decisions
+- Files or modules affected
+- Verification commands and results
+- Any remaining limitation, risk, or follow-up
+
+Do not expose internal chain-of-thought. Provide concise rationale and observable evidence.
 
 ## Required Inputs
 
@@ -366,6 +450,705 @@ Before approving implementation, verify:
 
 **Rule:** Code is not complete merely because it runs. It is complete when its intent is clear, its behaviour is verified, and its files are easy to locate and safely change.
 
+
+
+## Recommend the Best Approach Before Planning
+
+Do not create an implementation plan immediately. First inspect the problem, compare realistic approaches, recommend the best option, and then plan the work.
+
+### 1. Understand the Decision
+
+Determine:
+
+- The real problem and required outcome
+- Existing repository architecture and conventions
+- Functional and non-functional requirements
+- Project size and expected growth
+- Team skills and maintenance capacity
+- Delivery urgency
+- Security, performance, and reliability needs
+- Existing dependencies and infrastructure
+- Constraints that cannot be changed
+
+When information is missing, inspect the repository and state assumptions clearly.
+
+### 2. Identify Viable Approaches
+
+For a non-trivial decision, consider two or three realistic approaches.
+
+Examples:
+
+- Extend an existing module or create a new feature boundary
+- Use a local solution or shared infrastructure
+- Use synchronous work or a background job
+- Keep a modular monolith or introduce a service boundary
+- Reuse an existing dependency or add a new library
+- Refactor first or make a minimal compatible change
+- Use server state, client state, URL state, or local component state
+
+Do not invent alternatives when repository rules or user constraints clearly require one solution.
+
+### 3. Compare Trade-offs
+
+Evaluate relevant criteria:
+
+| Criterion | Evaluation |
+|---|---|
+| Correctness | Satisfies required behaviour and edge cases |
+| Simplicity | Uses the smallest clear solution |
+| Repository fit | Matches existing architecture and conventions |
+| Maintainability | Remains understandable and safe to change |
+| Scalability | Supports expected growth without premature complexity |
+| Security | Protects data and limits attack surface |
+| Performance | Is efficient enough for realistic usage |
+| Testability | Allows important behaviour to be verified |
+| Delivery risk | Minimizes regressions and unnecessary delay |
+| Reversibility | Can be changed later without excessive cost |
+
+### 4. Recommend One Approach
+
+State the decision before writing the plan:
+
+```text
+Recommended approach:
+[Approach name]
+
+Why:
+- [Primary reason]
+- [Repository or requirement fit]
+- [Maintainability or risk reason]
+
+Trade-offs:
+- [Known cost or limitation]
+- [What is intentionally not optimized]
+
+Rejected alternatives:
+- [Alternative]: [Concrete reason it is weaker here]
+```
+
+Be decisive. Do not leave the choice unresolved unless the user explicitly asks for options only.
+
+### 5. Record Planning Assumptions
+
+Before planning, record:
+
+- Chosen approach
+- Scope boundaries
+- Important assumptions
+- Affected features or modules
+- Compatibility or migration needs
+- Verification strategy
+- Important risks
+
+### 6. Create the Implementation Plan
+
+Only after choosing the approach, create an ordered plan.
+
+Each step should include:
+
+- Goal
+- Likely files or modules
+- Behaviour to add or preserve
+- Tests or verification
+- Dependencies
+- Completion condition
+
+### Proportionality
+
+- **Small change:** Brief recommendation, one alternative, and a short plan.
+- **Medium feature:** Compare two or three options with important trade-offs.
+- **Architecture or high-risk change:** Include migration impact, failure modes, rollback, and staged delivery.
+
+Do not over-design a small fix. Do not under-analyze a major architectural change.
+
+### Quality Gate
+
+Before planning, verify:
+
+- A meaningful alternative was considered for non-trivial decisions
+- The recommendation fits the repository
+- The simplest sufficient solution is preferred
+- Security and failure modes were considered
+- Premature abstraction is avoided
+- Trade-offs are explicit
+- Rejected alternatives have concrete reasons
+- The decision clearly guides implementation
+
+**Rule:** Recommend first. Plan second. Code third.
+
+
+## Evidence-Based Code Optimization
+
+Optimize only after correctness is established and a meaningful bottleneck or efficiency goal is identified. Do not trade clarity, safety, or maintainability for unmeasured speed.
+
+### Optimization Order
+
+Use this order:
+
+1. **Correctness:** Preserve required behaviour and edge cases.
+2. **Measure:** Establish a baseline using profiling, benchmarks, logs, query plans, bundle analysis, or production metrics.
+3. **Locate:** Identify the actual hot path, expensive query, repeated request, large allocation, or unnecessary render.
+4. **Improve:** Apply the smallest high-impact change.
+5. **Verify:** Re-run correctness tests and compare before/after measurements.
+6. **Document:** Record trade-offs when the optimized solution is less obvious.
+
+**Rule:** No optimization claim without before-and-after evidence when measurement is practical.
+
+### Optimization Priorities
+
+Prefer improvements in this order:
+
+| Priority | Examples |
+|---|---|
+| Algorithm and data structure | Replace repeated linear scans, avoid nested work, use appropriate indexing or lookup structures |
+| I/O and network | Remove duplicate requests, batch operations, paginate, stream, compress, cache carefully |
+| Database | Fix N+1 queries, add justified indexes, reduce selected columns, use query plans, avoid unnecessary transactions |
+| Rendering and state | Prevent unnecessary re-renders, colocate state, virtualize large lists, memoize only measured hot paths |
+| Memory | Avoid retaining large objects, release resources, stream large payloads, reduce copies and allocations |
+| Build and delivery | Reduce bundle size, lazy-load meaningful boundaries, remove dead dependencies, optimize assets |
+| Micro-optimization | Tight-loop or allocation tuning only after higher-impact options are exhausted |
+
+### Complexity Review
+
+For performance-sensitive code, state the expected time and space complexity when useful.
+
+Check for:
+
+- Repeated work inside loops
+- Nested iteration over growing collections
+- Unbounded in-memory accumulation
+- Expensive serialization or parsing
+- Repeated computation that can be safely reused
+- Blocking work on request or UI-critical paths
+- Excessive database or API round trips
+
+Do not replace a clear linear solution with a complex structure unless scale or measurement justifies it.
+
+### Frontend Optimization
+
+Inspect:
+
+- Unnecessary component re-renders
+- State stored higher than required
+- Derived state duplicated instead of computed
+- Oversized bundles and eagerly loaded routes
+- Large lists rendered without pagination or virtualization
+- Images, fonts, and assets loaded at inappropriate sizes
+- Repeated client requests or missing request deduplication
+- Expensive calculations during render
+
+Use memoization only when referential stability or measured render cost requires it. Unnecessary memoization adds complexity and can make performance worse.
+
+### Backend and API Optimization
+
+Inspect:
+
+- N+1 database queries
+- Missing pagination or unsafe unbounded queries
+- Repeated external service calls
+- Missing timeouts and cancellation
+- Sequential independent I/O that can safely run concurrently
+- Large response payloads
+- Slow serialization or unnecessary transformations
+- Work that belongs in a background job
+- Cache opportunities with clear invalidation rules
+
+Never add concurrency without considering ordering, rate limits, resource exhaustion, retries, and partial failure.
+
+### Database Optimization
+
+Before changing queries or indexes:
+
+- Capture the slow query and representative parameters
+- Inspect the execution plan when available
+- Verify table size and access pattern
+- Check existing indexes
+- Consider write cost and storage overhead
+- Test realistic data volume
+
+An index is justified only when its read benefit outweighs write and maintenance cost.
+
+### Caching Rules
+
+Before adding a cache, define:
+
+- What is cached
+- Cache key
+- Lifetime or eviction rule
+- Invalidation source
+- Consistency expectations
+- Failure fallback
+- Memory or storage limit
+- Whether sensitive data is safe to cache
+
+Do not use caching to hide an inefficient algorithm or broken query unless the underlying issue is also understood.
+
+### Memory and Resource Safety
+
+Check for:
+
+- Event listeners or subscriptions not removed
+- Timers not cleared
+- Streams, files, sockets, or database connections not closed
+- Unbounded queues, maps, logs, or caches
+- Large objects retained by closures
+- Full-file loading where streaming is appropriate
+
+Performance improvements must not introduce leaks or resource starvation.
+
+### Benchmark and Profiling Standards
+
+A useful benchmark should:
+
+- Exercise representative data and realistic workloads
+- Run enough times to reduce noise
+- Separate warm-up from measured execution when relevant
+- Compare the same environment and inputs
+- Report latency, throughput, memory, bundle size, query count, or another task-relevant metric
+- Avoid benchmarking only synthetic code when end-to-end behaviour is the true bottleneck
+
+### Optimization Trade-offs
+
+For every non-trivial optimization, consider:
+
+- Readability cost
+- Maintenance cost
+- Correctness risk
+- Cache consistency risk
+- Memory versus CPU trade-off
+- Latency versus throughput trade-off
+- Build size versus runtime speed
+- Immediate gain versus future flexibility
+
+Prefer reversible optimizations and preserve simple interfaces around complex internals.
+
+### Optimization Rejection Conditions
+
+Do not approve an optimization when:
+
+- No meaningful bottleneck or target is identified
+- There is no baseline measurement when one is practical
+- Tests do not protect existing behaviour
+- The change relies on unrealistic benchmark data
+- Complexity increases for negligible benefit
+- Cache invalidation is undefined
+- Concurrency failure modes are ignored
+- Memory usage or resource limits are unbounded
+- Security or data correctness is weakened
+- The claimed improvement was not re-measured
+
+### Required Optimization Report
+
+When optimization is part of the task, report:
+
+```text
+Optimization target:
+[What was slow or inefficient]
+
+Baseline:
+[Measurement and method]
+
+Change:
+[What was changed and why]
+
+Result:
+[Before/after measurement]
+
+Trade-offs:
+[Complexity, memory, consistency, or maintenance impact]
+
+Verification:
+[Tests, profiling, build, and relevant checks]
+```
+
+**Rule:** Make the common path faster only when evidence shows it matters, and keep the code understandable enough to maintain safely.
+
+
+## Code Structure Standard
+
+Organize code so that ownership, dependencies, and change boundaries are obvious. A good structure helps developers find behaviour quickly and modify one feature without unexpectedly breaking another.
+
+### Structural Goals
+
+The project structure should make these questions easy to answer:
+
+- Where does a feature live?
+- Which module owns a business rule?
+- Which code is reusable across features?
+- Which layer communicates with external systems?
+- Where are tests located?
+- Which imports are public and supported?
+- Which dependencies are allowed?
+
+### Preferred High-Level Structure
+
+Use a feature-first structure for medium and large applications:
+
+```text
+src/
+├── app/
+│   ├── config/
+│   ├── providers/
+│   ├── router/
+│   └── bootstrap/
+├── features/
+│   ├── auth/
+│   ├── users/
+│   ├── products/
+│   └── orders/
+├── shared/
+│   ├── components/
+│   ├── utilities/
+│   ├── types/
+│   └── infrastructure/
+└── main.ts
+```
+
+Use a simpler module-based structure only when the project is small and unlikely to grow significantly.
+
+### Feature Boundary
+
+A feature should own its related behaviour:
+
+```text
+features/orders/
+├── api/
+├── components/
+├── domain/
+├── hooks/
+├── pages/
+├── services/
+├── state/
+├── tests/
+├── types/
+└── index.ts
+```
+
+Not every feature needs every folder. Create only the folders that represent real responsibilities.
+
+### Layer Responsibilities
+
+| Layer | Responsibility |
+|---|---|
+| `app` | Application startup, global providers, routing, and configuration |
+| `features` | Business capabilities and feature-specific behaviour |
+| `shared` | Stable reusable code with no feature ownership |
+| `domain` | Business rules, entities, and value objects |
+| `api` or `infrastructure` | HTTP, database, queues, storage, and third-party integrations |
+| `components` | Presentation and user interaction |
+| `services` | Coordinating use cases or external operations |
+| `tests` | Behaviour verification close to the code it protects |
+
+### Dependency Direction
+
+Prefer dependencies that flow inward toward stable business rules:
+
+```text
+UI → application/use cases → domain
+                     ↓
+              infrastructure
+```
+
+Rules:
+
+- Domain code must not depend on UI frameworks.
+- Business rules must not depend directly on HTTP, database, or vendor SDKs.
+- Shared code must not import feature-specific code.
+- One feature must not reach into another feature's internal folders.
+- Cross-feature communication should use public exports, events, or well-defined interfaces.
+- Avoid circular dependencies.
+
+### Public Exports
+
+Each feature should expose a small public surface:
+
+```text
+features/auth/index.ts
+```
+
+Consumers should import from:
+
+```typescript
+import { LoginForm, useAuth } from "@/features/auth";
+```
+
+Avoid deep internal imports:
+
+```typescript
+import { LoginForm } from "@/features/auth/components/forms/LoginForm";
+```
+
+Deep imports couple callers to internal structure and make refactoring harder.
+
+### File Responsibility
+
+Each file should have one clear purpose.
+
+Prefer:
+
+```text
+createOrder.ts
+calculateOrderTotal.ts
+OrderRepository.ts
+OrderSummary.tsx
+useOrderFilters.ts
+```
+
+Avoid:
+
+```text
+helpers.ts
+utils.ts
+common.ts
+misc.ts
+everything.ts
+```
+
+Generic filenames are acceptable only when the scope is already narrow and unambiguous.
+
+### Test Placement
+
+Use one consistent strategy:
+
+**Colocated tests**
+
+```text
+calculateOrderTotal.ts
+calculateOrderTotal.test.ts
+```
+
+**Feature test folder**
+
+```text
+features/orders/
+├── domain/
+├── services/
+└── tests/
+```
+
+Choose based on repository conventions. Do not mix styles without a clear reason.
+
+### Frontend Structure Rules
+
+- Keep reusable design-system components in `shared`.
+- Keep business-specific components inside their feature.
+- Separate presentation from data-fetching logic when complexity justifies it.
+- Keep route-level components thin.
+- Avoid global state for state owned by one feature or component.
+- Keep server-state handling separate from local UI state.
+- Co-locate styles, tests, and stories when the repository supports it.
+
+### Backend Structure Rules
+
+- Keep transport logic thin.
+- Put business rules outside controllers and route handlers.
+- Keep persistence behind repositories or equivalent interfaces when useful.
+- Separate validation from persistence.
+- Avoid placing all logic in one service file.
+- Organize code by business capability rather than only by technical layer when the codebase grows.
+- Keep migrations, schemas, and data-access ownership clear.
+
+### Structure Decision Guide
+
+Use module-based organization when:
+
+- The project is small
+- The team is small
+- The domain is simple
+- Features have little independent ownership
+
+Use feature-based organization when:
+
+- The application has several business capabilities
+- Multiple developers work in parallel
+- Features evolve independently
+- The codebase is expected to grow
+
+Use a hybrid approach when:
+
+- Global application concerns must remain centralized
+- Business code should stay feature-owned
+- Stable reusable code belongs in shared modules
+
+### Refactoring Structure Safely
+
+When restructuring code:
+
+1. Preserve behaviour with tests.
+2. Move one boundary at a time.
+3. Update imports mechanically.
+4. Keep public interfaces stable where possible.
+5. Run tests, type checks, linting, and builds after each meaningful move.
+6. Review the final diff for accidental edits.
+7. Remove dead paths only after verifying no callers remain.
+
+Do not combine a large structural refactor with unrelated feature development unless necessary.
+
+### Code Structure Quality Gate
+
+Before approving the structure, verify:
+
+- Feature ownership is clear
+- Business logic is not trapped in UI or transport layers
+- Shared code is genuinely reusable
+- Dependencies flow in the intended direction
+- Circular imports are absent
+- Public exports are small and intentional
+- Filenames describe responsibilities
+- Tests are easy to locate
+- New developers can find feature code quickly
+- The structure matches project size and team needs
+- Empty or speculative folders were not added
+- The structure supports change without unnecessary coupling
+
+**Rule:** Structure code around responsibility and change boundaries, not around arbitrary folder names.
+
+
+## Senior Programmer Code-Quality Gate
+
+Treat correctness, readability, and understandability as separate requirements. A change is not complete unless it satisfies all three.
+
+| Quality dimension | Required outcome |
+|---|---|
+| Correctness | The code produces the required behaviour and handles relevant failures |
+| Readability | A developer can follow the control flow and naming without decoding the implementation |
+| Understandability | The purpose, business rules, inputs, outputs, side effects, and failure conditions are apparent |
+| Maintainability | The change can be extended or fixed without unnecessary coupling or duplication |
+| Testability | Important behaviour can be verified through focused automated tests or strong equivalent checks |
+
+### Understand Before Changing
+
+Before editing code, Codex must be able to state:
+
+- What responsibility the relevant module owns
+- Which behaviour is changing
+- Which public interface or caller depends on it
+- Where business rules belong
+- Which inputs are trusted or untrusted
+- Which side effects occur
+- What can fail
+- How the change will be verified
+
+If these cannot be determined, inspect more of the repository before implementation.
+
+### Readability Rules
+
+- Use domain language instead of generic abbreviations.
+- Name booleans as states or questions, such as `isActive`, `hasPermission`, or `canCancelOrder`.
+- Keep related statements close together.
+- Use guard clauses when they reduce nesting.
+- Avoid clever expressions that save lines but hide intent.
+- Extract a named concept when an expression represents an important business rule.
+- Keep one level of abstraction within a function where practical.
+- Make side effects visible in names and structure.
+- Prefer explicit error handling over silent failure.
+- Keep the happy path easy to find.
+
+```typescript
+function canUserCancelOrder(order: Order, user: User): boolean {
+  const ownsOrder = order.customerId === user.id;
+  const isPending = order.status === "pending";
+
+  return ownsOrder && isPending;
+}
+```
+
+Prefer this over an unexplained compound condition repeated across controllers or components.
+
+### Function Review Questions
+
+For every changed function, ask:
+
+1. Does its name describe the result or action?
+2. Does it perform one cohesive responsibility?
+3. Are its inputs and return value clear?
+4. Are side effects obvious?
+5. Are failure modes handled or deliberately propagated?
+6. Is complex branching necessary?
+7. Would extracting a business rule improve clarity?
+8. Is the function tested at the appropriate level?
+
+Do not enforce arbitrary line-count limits. Split functions when responsibilities or abstraction levels are mixed.
+
+### Comments and Documentation
+
+Use comments for:
+
+- Non-obvious business reasons
+- Compatibility constraints
+- Security decisions
+- Performance trade-offs
+- Temporary workarounds
+- Invariants future changes must preserve
+
+Do not use comments to translate obvious syntax. Improve names or structure instead.
+
+### Error-Handling Standard
+
+- Never swallow an error without an intentional fallback.
+- Preserve useful context when wrapping errors.
+- Avoid leaking secrets or sensitive user data into logs.
+- Return errors at the correct abstraction level.
+- Distinguish validation, authorization, not-found, conflict, dependency, and unexpected failures when needed.
+- Test important failure paths, not only successful execution.
+
+### Duplication and Abstraction
+
+Create an abstraction when:
+
+- The duplicated code represents the same stable concept
+- The implementations must change together
+- The abstraction has clear ownership and a meaningful name
+
+Keep code separate when:
+
+- Similar code serves different business rules
+- Sharing would require unrelated flags or branching
+- The duplication is clearer than a premature framework
+
+### Senior Review Sequence
+
+Review code in this order:
+
+1. **Behaviour:** Acceptance criteria are satisfied.
+2. **Safety:** Validation, authorization, data integrity, and failures are handled.
+3. **Design:** Responsibility is placed in the correct feature or module.
+4. **Readability:** Another developer can understand the intent quickly.
+5. **Maintainability:** Coupling is controlled and duplication is reasonable.
+6. **Verification:** Tests and repository checks prove the change works.
+7. **Diff hygiene:** Unrelated edits, debug code, and temporary files are absent.
+
+### Required Completion Evidence
+
+Before reporting completion, include evidence for applicable checks:
+
+- Focused test command and result
+- Type-check or compile result
+- Lint result
+- Build result
+- Relevant integration or manual verification
+- Final diff review
+
+If a check cannot run, state the exact reason and the alternative verification used.
+
+### Code-Quality Rejection Conditions
+
+Do not approve or claim completion when any of these remain without explanation:
+
+- Vague names that hide business meaning
+- Mixed UI, business, persistence, or transport responsibilities
+- Silent error handling
+- Deep nesting that obscures the main path
+- Repeated business rules that can drift
+- Unvalidated external input
+- Unclear feature ownership
+- Dead code, debug output, or temporary files
+- Missing regression coverage for a bug fix
+- Claims of passing checks without observed output
+
+**Rule:** Optimize code for the next developer who must understand and safely change it, not merely for the current implementation to execute.
+
+
 ## Application Development Cycle
 
 ### 1. Discovery
@@ -620,6 +1403,22 @@ Continue with:
 15. Support QA and fix verified defects.
 16. Mark the task complete only after acceptance criteria are verified.
 
+## Codex Change Output
+
+For repository implementation tasks, prefer this completion format:
+
+### Summary
+Describe the user-visible or developer-visible outcome.
+
+### Implementation
+List the main modules changed and the approach used.
+
+### Verification
+Include the exact checks run and whether each succeeded.
+
+### Notes
+Mention migrations, compatibility concerns, assumptions, or unresolved limitations only when relevant.
+
 ## Recommended Output Format
 
 When applying this skill, produce:
@@ -661,6 +1460,8 @@ Give a short, ordered set of tasks that can begin now.
 
 Before completing the plan, verify:
 
+- Repository instructions and existing conventions were inspected
+- Git status and unrelated user changes were respected
 - The problem and target users are defined
 - The plan distinguishes programming decisions from code-writing tasks
 - Every major feature belongs to a user role
@@ -676,6 +1477,8 @@ Before completing the plan, verify:
 - Security, validation, errors, and backups are considered
 - Testing happens before production deployment
 - Deployment includes monitoring and rollback
+- The final diff contains no accidental or unrelated edits
+- Completion claims are supported by successful verification output
 - The plan contains concrete next actions
 
 ## Common Mistakes
